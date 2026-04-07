@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Purchase KPI Dashboard Report</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 24px; background: #ffffff; color: #1f1f1f; }
+h1 { text-align: center; margin: 0; color: #11334A; text-decoration: underline; }
+h2 { margin: 8px 0 14px 0; text-align: center; color: #1F4E6B; }
+.legend { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; }
+.badge { padding: 8px 16px; border: 1px solid #555; font-weight: bold; border-radius: 4px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.card { border: 1px solid #B8C3CD; border-radius: 8px; padding: 12px; }
+.card h3 { margin-top: 0; color: #0E2F44; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #D6DEE6; padding: 7px; font-size: 13px; }
+th { background: #EFF4F8; }
+.dot { width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-right: 6px; }
+.gauge { width: 100%; height: 22px; border-radius: 12px; background: linear-gradient(90deg,#D64C4C 0% 40%, #E0B93A 40% 75%, #4CAF50 75% 100%); position: relative; }
+.pointer { position: absolute; top: -3px; width: 3px; height: 28px; background: #111; left: 85.0%; }
+.small { color: #607080; font-size: 12px; }
+</style>
+</head>
+<body>
+  <h1>Purchase KPI Dashboard</h1>
+  <h2>Month: March | Year: 2026</h2>
+
+  <div class="legend">
+    <div class="badge" style="background:#F2C94C">Chennai</div>
+    <div class="badge" style="background:#F2994A">Bhiwadi</div>
+    <div class="badge" style="background:#4A90E2;color:#fff">Jhagadia</div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>COF (Overall Actual: 45.00)</h3>
+      <table>
+        <tr><th>Section</th><th>UOM</th><th>Actual</th><th>Target</th></tr>
+        <tr><td><span class='dot' style='background:#F2C94C'></span>COF Chennai</td><td>MINR</td><td>20.00</td><td>40.00</td></tr>
+<tr><td><span class='dot' style='background:#F2994A'></span>COF Bhiwadi</td><td>MINR</td><td>10.00</td><td>30.00</td></tr>
+<tr><td><span class='dot' style='background:#4A90E2'></span>COF Jhagadia</td><td>MINR</td><td>15.00</td><td>25.00</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Working Capital</h3>
+      <table>
+        <tr><th>Section</th><th>UOM</th><th>Actual</th><th>Target</th></tr>
+        <tr><td><span class='dot' style='background:#F2C94C'></span>Working Capital Chennai</td><td>MINR</td><td>15.00</td><td>20.00</td></tr>
+<tr><td><span class='dot' style='background:#F2994A'></span>Working Capital Bhiwadi</td><td>MINR</td><td>10.00</td><td>20.00</td></tr>
+<tr><td><span class='dot' style='background:#4A90E2'></span>Working Capital Jhagadia</td><td>MINR</td><td>20.00</td><td>30.00</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Responsible Purchase</h3>
+      <div class="gauge"><div class="pointer"></div></div>
+      <p><b>Actual:</b> 85.00%</p>
+      <p class="small">Range: 0-40 Red, 40-75 Yellow, 75-100 Green</p>
+    </div>
+
+    <div class="card">
+      <h3>RFX, E Auction, Prorating, Pro Contract, TOD</h3>
+      <table>
+        <tr><th>Category</th><th>Location</th><th>Actual</th><th>Target</th></tr>
+        <tr><td>RFX</td><td>Chennai</td><td>10.00</td><td>15.00</td></tr><tr><td>RFX</td><td>Bhiwadi</td><td>10.00</td><td>20.00</td></tr><tr><td>RFX</td><td>Jhagadia</td><td>5.00</td><td>15.00</td></tr>
+        <tr><td>E Auction</td><td>Chennai</td><td>10.00</td><td>20.00</td></tr><tr><td>E Auction</td><td>Bhiwadi</td><td>5.00</td><td>10.00</td></tr><tr><td>E Auction</td><td>Jhagadia</td><td>10.00</td><td>15.00</td></tr>
+        <tr><td>Prorating</td><td>Chennai</td><td>10.00</td><td>15.00</td></tr><tr><td>Prorating</td><td>Bhiwadi</td><td>15.00</td><td>20.00</td></tr><tr><td>Prorating</td><td>Jhagadia</td><td>20.00</td><td>30.00</td></tr>
+        <tr><td>Pro Contract</td><td>Chennai</td><td>10.00</td><td>20.00</td></tr><tr><td>Pro Contract</td><td>Bhiwadi</td><td>5.00</td><td>10.00</td></tr><tr><td>Pro Contract</td><td>Jhagadia</td><td>10.00</td><td>15.00</td></tr>
+        <tr><td>TOD</td><td>Chennai</td><td>15.00</td><td>25.00</td></tr><tr><td>TOD</td><td>Bhiwadi</td><td>10.00</td><td>20.00</td></tr><tr><td>TOD</td><td>Jhagadia</td><td>5.00</td><td>15.00</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <p class="small">Generated on 2026-04-04 16:56:32</p>
+</body>
+</html>
