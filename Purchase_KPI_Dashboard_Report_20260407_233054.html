@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Purchase KPI Dashboard Report</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 24px; background: #ffffff; color: #1f1f1f; }
+h1 { text-align: center; margin: 0; color: #11334A; text-decoration: underline; }
+h2 { margin: 8px 0 14px 0; text-align: center; color: #1F4E6B; }
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.viz-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "resp tod"
+    "rfx ea"
+    "pc  pr";
+  gap: 16px;
+}
+.card { border: 1px solid #B8C3CD; border-radius: 8px; padding: 12px; background: #FFFFFF; }
+.card h3 { margin-top: 0; color: #0E2F44; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #D6DEE6; padding: 7px; font-size: 13px; }
+th { background: #EFF4F8; }
+.summary-table th:nth-child(2), .summary-table th:nth-child(3), .summary-table th:nth-child(4),
+.summary-table td:nth-child(2), .summary-table td:nth-child(3), .summary-table td:nth-child(4) { text-align: center; }
+.dot { width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-right: 6px; }
+.chart { width: 100%; height: 260px; display: block; }
+.chart-tall { height: 300px; }
+.chart-pie { height: 380px; }
+.speedo { width: 100%; height: 280px; display: block; }
+.small { color: #607080; font-size: 12px; margin: 6px 0 0 0; }
+.speed-wrap { text-align: center; }
+.bar-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.legend-chip { font-size: 12px; border: 1px solid #B8C3CD; border-radius: 12px; padding: 4px 10px; }
+.swatch { display: inline-block; width: 12px; height: 12px; border: 1px solid #888; margin-right: 6px; vertical-align: -1px; }
+.resp { grid-area: resp; }
+.rfx { grid-area: rfx; }
+.ea { grid-area: ea; }
+.pr { grid-area: pr; }
+.tod { grid-area: tod; }
+.pc { grid-area: pc; }
+</style>
+</head>
+<body>
+  <h1>Purchase KPI Dashboard</h1>
+  <h2>Month: April | Year: 2026</h2>
+
+  <div class="summary-grid">
+    <div class="card">
+      <h3>COF (Overall Actual: 42.00)</h3>
+      <table class="summary-table">
+        <tr><th>Section</th><th>UOM</th><th>Actual</th><th>Target</th></tr>
+        <tr><td><span class='dot' style='background:#F2C94C'></span>COF Chennai</td><td>MINR</td><td>10.00</td><td>15.00</td></tr>
+<tr><td><span class='dot' style='background:#F2994A'></span>COF Bhiwadi</td><td>MINR</td><td>20.00</td><td>26.00</td></tr>
+<tr><td><span class='dot' style='background:#4A90E2'></span>COF Jhagadia</td><td>MINR</td><td>12.00</td><td>30.00</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Working Capital</h3>
+      <table class="summary-table">
+        <tr><th>Section</th><th>UOM</th><th>Actual</th><th>Target</th></tr>
+        <tr><td><span class='dot' style='background:#F2C94C'></span>Working Capital Chennai</td><td>MINR</td><td>10.00</td><td>20.00</td></tr>
+<tr><td><span class='dot' style='background:#F2994A'></span>Working Capital Bhiwadi</td><td>MINR</td><td>15.00</td><td>20.00</td></tr>
+<tr><td><span class='dot' style='background:#4A90E2'></span>Working Capital Jhagadia</td><td>MINR</td><td>5.00</td><td>10.00</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="viz-grid">
+    <div class="card resp">
+      <h3>Responsible Purchase</h3>
+      <div class="speed-wrap">
+        <canvas id="speedometer" class="speedo"></canvas>
+        <div class="small">Actual Value from Input: <b>85.00%</b></div>
+      </div>
+    </div>
+
+    <div class="card rfx">
+      <h3>RFX</h3>
+      <canvas id="rfxChart" class="chart chart-tall"></canvas>
+      <div class="bar-legend">
+        <span class="legend-chip"><span class="swatch" style="background:#F2C94C;"></span>Actual</span>
+        <span class="legend-chip"><span class="swatch" style="background:#2E8B57;"></span>Target</span>
+      </div>
+    </div>
+
+    <div class="card ea">
+      <h3>E Auction</h3>
+      <canvas id="eAuctionChart" class="chart"></canvas>
+      <div class="bar-legend">
+        <span class="legend-chip"><span class="swatch" style="background:#F2C94C;"></span>Actual</span>
+        <span class="legend-chip"><span class="swatch" style="background:#2E8B57;"></span>Target</span>
+      </div>
+    </div>
+
+    <div class="card pr">
+      <h3>Prorating</h3>
+      <canvas id="proratingChart" class="chart"></canvas>
+      <div class="bar-legend">
+        <span class="legend-chip"><span class="swatch" style="background:#F2C94C;"></span>Actual</span>
+        <span class="legend-chip"><span class="swatch" style="background:#2E8B57;"></span>Target</span>
+      </div>
+    </div>
+
+    <div class="card tod">
+      <h3>TOD Target (Pie Chart)</h3>
+      <canvas id="todPie" class="chart chart-pie"></canvas>
+      <div class="bar-legend">
+        <span class="legend-chip"><span class="swatch" style="background:#F2C94C;"></span>Chennai</span>
+        <span class="legend-chip"><span class="swatch" style="background:#F2994A;"></span>Bhiwadi</span>
+        <span class="legend-chip"><span class="swatch" style="background:#4A90E2;"></span>Jhagadia</span>
+      </div>
+    </div>
+
+    <div class="card pc">
+      <h3>Pro Contract</h3>
+      <canvas id="proContractChart" class="chart"></canvas>
+      <div class="bar-legend">
+        <span class="legend-chip"><span class="swatch" style="background:#F2C94C;"></span>Actual</span>
+        <span class="legend-chip"><span class="swatch" style="background:#2E8B57;"></span>Target</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="small">Generated on 2026-04-07 23:30:54</p>
+<script>
+const LOCATION_COLORS = {"Chennai": "#F2C94C", "Bhiwadi": "#F2994A", "Jhagadia": "#4A90E2"};
+const ACTUAL_YELLOW = "#F2C94C";
+const TARGET_GREEN = "#2E8B57";
+const RFX_DATA = {"Chennai": {"actual": 10.0, "target": 20.0}, "Bhiwadi": {"actual": 15.0, "target": 20.0}, "Jhagadia": {"actual": 12.0, "target": 24.0}};
+const E_AUCTION_DATA = {"Chennai": {"actual": 10.0, "target": 20.0}, "Bhiwadi": {"actual": 15.0, "target": 20.0}, "Jhagadia": {"actual": 10.0, "target": 20.0}};
+const PRORATING_DATA = {"Chennai": {"actual": 10.0, "target": 20.0}, "Bhiwadi": {"actual": 25.0, "target": 45.0}, "Jhagadia": {"actual": 20.0, "target": 35.0}};
+const PRO_CONTRACT_DATA = {"Chennai": {"actual": 28.0, "target": 30.0}, "Bhiwadi": {"actual": 20.0, "target": 25.0}, "Jhagadia": {"actual": 10.0, "target": 20.0}};
+const TOD_TARGET_DATA = {"Chennai": 34.0, "Bhiwadi": 15.0, "Jhagadia": 12.0};
+const RESPONSIBLE_ACTUAL = 85.0;
+
+function setupCanvas(canvas) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+  canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return [ctx, rect.width, rect.height];
+}
+
+function drawBarChart(canvasId, categoryData) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const [ctx, w, h] = setupCanvas(canvas);
+  ctx.clearRect(0, 0, w, h);
+
+  const locations = ["Chennai", "Bhiwadi", "Jhagadia"];
+  const points = locations.map(loc => categoryData[loc] || {actual: 0, target: 0});
+  const maxVal = Math.max(1, ...points.map(p => Math.max(p.actual, p.target)));
+
+  const left = 52, right = 14, top = 16, bottom = 42;
+  const plotW = w - left - right;
+  const plotH = h - top - bottom;
+
+  ctx.strokeStyle = "#D1DAE4";
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = top + (plotH * i / 4);
+    ctx.beginPath();
+    ctx.moveTo(left, y);
+    ctx.lineTo(left + plotW, y);
+    ctx.stroke();
+    const tickVal = (maxVal * (1 - i / 4)).toFixed(0);
+    ctx.fillStyle = "#607080";
+    ctx.font = "11px Arial";
+    ctx.fillText(tickVal, 8, y + 4);
+  }
+
+  ctx.strokeStyle = "#7A8A98";
+  ctx.beginPath();
+  ctx.moveTo(left, top);
+  ctx.lineTo(left, top + plotH);
+  ctx.lineTo(left + plotW, top + plotH);
+  ctx.stroke();
+
+  const groupW = plotW / 3;
+  const barW = Math.min(28, groupW * 0.24);
+  const innerGap = 8;
+
+  locations.forEach((loc, i) => {
+    const item = points[i];
+    const gx = left + groupW * i + (groupW / 2);
+    const actualH = (item.actual / maxVal) * plotH;
+    const targetH = (item.target / maxVal) * plotH;
+
+    const ax = gx - barW - innerGap / 2;
+    const ay = top + plotH - actualH;
+    ctx.fillStyle = ACTUAL_YELLOW;
+    ctx.fillRect(ax, ay, barW, actualH);
+
+    const tx = gx + innerGap / 2;
+    const ty = top + plotH - targetH;
+    ctx.fillStyle = TARGET_GREEN;
+    ctx.fillRect(tx, ty, barW, targetH);
+
+    ctx.fillStyle = "#253748";
+    ctx.font = "11px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(item.actual.toFixed(1), ax + barW / 2, ay - 4);
+    ctx.fillText(item.target.toFixed(1), tx + barW / 2, ty - 4);
+
+    ctx.fillStyle = "#1F2F3D";
+    ctx.font = "12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(loc, gx, top + plotH + 18);
+  });
+}
+
+function drawTODPie(canvasId, targetData) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const [ctx, w, h] = setupCanvas(canvas);
+  ctx.clearRect(0, 0, w, h);
+
+  const locations = ["Chennai", "Bhiwadi", "Jhagadia"];
+  const values = locations.map(loc => Number(targetData[loc] || 0));
+  const total = values.reduce((a, b) => a + b, 0);
+  const cx = w * 0.5;
+  const cy = h * 0.52;
+  const r = Math.min(w, h) * 0.43;
+
+  if (total <= 0) {
+    ctx.fillStyle = "#6B7C8A";
+    ctx.font = "14px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("No target values to display", w / 2, h / 2);
+    return;
+  }
+
+  let start = -Math.PI / 2;
+  locations.forEach((loc, i) => {
+    const val = values[i];
+    const angle = (val / total) * Math.PI * 2;
+    const end = start + angle;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, start, end);
+    ctx.closePath();
+    ctx.fillStyle = LOCATION_COLORS[loc];
+    ctx.fill();
+    const mid = (start + end) / 2;
+    const lx = cx + (r * 0.68) * Math.cos(mid);
+    const ly = cy + (r * 0.68) * Math.sin(mid);
+    const pct = ((val / total) * 100).toFixed(1);
+    ctx.fillStyle = "#172B3A";
+    ctx.font = "bold 12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(`${loc}`, lx, ly - 7);
+    ctx.font = "11px Arial";
+    ctx.fillText(`${val.toFixed(1)} (${pct}%)`, lx, ly + 10);
+    start = end;
+  });
+}
+
+function drawSpeedometer(canvasId, value) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const [ctx, w, h] = setupCanvas(canvas);
+  ctx.clearRect(0, 0, w, h);
+
+  const cx = w / 2;
+  const cy = h * 0.80;
+  const radius = Math.min(w, h) * 0.39;
+
+  function drawArc(p1, p2, color) {
+    const a1 = Math.PI + (p1 / 100) * Math.PI;
+    const a2 = Math.PI + (p2 / 100) * Math.PI;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, a1, a2);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 24;
+    ctx.lineCap = "round";
+    ctx.stroke();
+  }
+
+  drawArc(0, 40, "#D64C4C");
+  drawArc(40, 75, "#E0B93A");
+  drawArc(75, 100, "#4CAF50");
+
+  const v = Math.max(0, Math.min(100, Number(value || 0)));
+  const angle = Math.PI + (v / 100) * Math.PI;
+  const nx = cx + (radius - 10) * Math.cos(angle);
+  const ny = cy + (radius - 10) * Math.sin(angle);
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(nx, ny);
+  ctx.strokeStyle = "#101820";
+  ctx.lineWidth = 4;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+  ctx.fillStyle = "#101820";
+  ctx.fill();
+
+  [0, 20, 40, 60, 75, 100].forEach(tick => {
+    const tAngle = Math.PI + (tick / 100) * Math.PI;
+    const tx = cx + (radius + 24) * Math.cos(tAngle);
+    const ty = cy + (radius + 24) * Math.sin(tAngle);
+    ctx.fillStyle = "#33495C";
+    ctx.font = "11px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(String(tick), tx, ty + 4);
+  });
+
+  ctx.fillStyle = "#12344B";
+  ctx.font = "bold 14px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(`Actual: ${v.toFixed(2)}%`, cx, h - 16);
+}
+
+function renderAllCharts() {
+  drawSpeedometer("speedometer", RESPONSIBLE_ACTUAL);
+  drawBarChart("rfxChart", RFX_DATA);
+  drawBarChart("eAuctionChart", E_AUCTION_DATA);
+  drawBarChart("proratingChart", PRORATING_DATA);
+  drawBarChart("proContractChart", PRO_CONTRACT_DATA);
+  drawTODPie("todPie", TOD_TARGET_DATA);
+}
+
+window.addEventListener("load", renderAllCharts);
+window.addEventListener("resize", renderAllCharts);
+</script>
+</body>
+</html>
