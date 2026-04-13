@@ -507,7 +507,7 @@ class PurchaseKPIDashboard(tk.Tk):
             values = [float(by_loc.get(loc, {}).get("target", 0.0)) for loc in locations]
             colors = [LOCATION_COLORS[loc] for loc in locations]
 
-            ax.set_title("TOD Target (Pie Chart)", fontsize=10, fontweight="bold")
+            ax.set_title("TOD Target (Pie Chart)", fontsize=11, fontweight="bold")
             total = sum(values)
             if total <= 0:
                 ax.axis("off")
@@ -523,12 +523,12 @@ class PurchaseKPIDashboard(tk.Tk):
                 colors=colors,
                 startangle=90,
                 autopct=autopct_formatter,
-                textprops={"fontsize": 7.5, "color": "#203040"},
+                textprops={"fontsize": 8.5, "color": "#203040"},
             )
             ax.legend(
                 wedges,
                 locations,
-                fontsize=7.5,
+                fontsize=8.5,
                 loc="upper center",
                 bbox_to_anchor=(0.5, -0.14),
                 ncol=3,
@@ -543,7 +543,7 @@ class PurchaseKPIDashboard(tk.Tk):
 
             outer = fig.add_gridspec(2, 1, height_ratios=[1.0, 2.4], hspace=0.32)
             top = outer[0].subgridspec(1, 2, wspace=0.20)
-            bottom = outer[1].subgridspec(3, 2, hspace=0.72, wspace=0.26)
+            bottom = outer[1].subgridspec(3, 2, height_ratios=[1.25, 1.0, 1.0], hspace=0.72, wspace=0.26)
 
             cof_items = data["COF"]
             wc_items = data["Working Capital"]
@@ -662,6 +662,7 @@ th {{ background: #EFF4F8; }}
 .dot {{ width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-right: 6px; }}
 .chart {{ width: 100%; height: 260px; display: block; }}
 .chart-tall {{ height: 300px; }}
+.chart-pie {{ height: 380px; }}
 .speedo {{ width: 100%; height: 280px; display: block; }}
 .small {{ color: #607080; font-size: 12px; margin: 6px 0 0 0; }}
 .speed-wrap {{ text-align: center; }}
@@ -736,7 +737,7 @@ th {{ background: #EFF4F8; }}
 
     <div class="card tod">
       <h3>TOD Target (Pie Chart)</h3>
-      <canvas id="todPie" class="chart chart-tall"></canvas>
+      <canvas id="todPie" class="chart chart-pie"></canvas>
       <div class="bar-legend">
         <span class="legend-chip"><span class="swatch" style="background:#F2C94C;"></span>Chennai</span>
         <span class="legend-chip"><span class="swatch" style="background:#F2994A;"></span>Bhiwadi</span>
@@ -854,8 +855,8 @@ function drawTODPie(canvasId, targetData) {{
   const values = locations.map(loc => Number(targetData[loc] || 0));
   const total = values.reduce((a, b) => a + b, 0);
   const cx = w * 0.5;
-  const cy = h * 0.50;
-  const r = Math.min(w, h) * 0.50;
+  const cy = h * 0.52;
+  const r = Math.min(w, h) * 0.43;
 
   if (total <= 0) {{
     ctx.fillStyle = "#6B7C8A";
@@ -877,15 +878,15 @@ function drawTODPie(canvasId, targetData) {{
     ctx.fillStyle = LOCATION_COLORS[loc];
     ctx.fill();
     const mid = (start + end) / 2;
-    const lx = cx + (r * 0.64) * Math.cos(mid);
-    const ly = cy + (r * 0.64) * Math.sin(mid);
+    const lx = cx + (r * 0.68) * Math.cos(mid);
+    const ly = cy + (r * 0.68) * Math.sin(mid);
     const pct = ((val / total) * 100).toFixed(1);
     ctx.fillStyle = "#172B3A";
-    ctx.font = "bold 11px Arial";
+    ctx.font = "bold 12px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(`${{loc}}`, lx, ly - 6);
-    ctx.font = "10px Arial";
-    ctx.fillText(`${{val.toFixed(1)}} (${{pct}}%)`, lx, ly + 8);
+    ctx.fillText(`${{loc}}`, lx, ly - 7);
+    ctx.font = "11px Arial";
+    ctx.fillText(`${{val.toFixed(1)}} (${{pct}}%)`, lx, ly + 10);
     start = end;
   }});
 }}
